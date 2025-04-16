@@ -8,7 +8,7 @@ function App () {
   const [playerTwoTurn, updatePlayerTwoTurn] = useState<boolean>(false);
   const [draw, updateDraw] = useState<boolean>(false);
   const [gameOver, updateGameOver] = useState<boolean>(false);
-  
+
   const checkForWin = (): boolean => {
     // Check for winning combinations
     const winningCombinations = [
@@ -44,6 +44,24 @@ function App () {
         }
       }
     }
+    // Check for draw
+    const allElements = document.querySelectorAll('div[data-number]');
+    let allFilled = true;
+    allElements.forEach((element) => {
+      if (element.textContent === "") {
+        allFilled = false;
+      }
+    });
+    if (allFilled) {
+      updateDraw(true);
+      updateGameOver(true);
+      alert("It's a draw!");
+      window.location.reload();
+      return false;
+    }
+    // If no winner or draw, return false
+    updateGameOver(false);
+    updateDraw(false);
 
     return false;
   
@@ -78,17 +96,15 @@ function App () {
   
 
   return (
-    <>
-      <div className="flex flex-row justify-center">
-        <h1 className="text-5xl text-sky-500 font-bold">Tic Tac Toe</h1>
+    <div className="flex flex-col items-center justify-center min-h-screen space-y-6">
+      
+      <div className="flex flex-col items-center space-y-2">
+        <h1 className="text-7xl text-sky-500 font-bold">Tic Tac Toe</h1>
+      
+      <span className="text-2xl text-sky-500 font-bold">Player 1: X</span>
+      <span className="text-2xl text-sky-500 font-bold">Player 2: O</span>
+      <span className="text-2xl text-sky-500 font-bold">Current Turn: {playerOneTurn ? "Player 1" : "Player 2"}</span>
       </div>
-      <span className="text-5xl text-sky-500 font-bold">Player 1: X</span>
-      <br />
-      <span className="text-5xl text-sky-500 font-bold">Player 2: O</span>
-      <br />
-      <span className="text-5xl text-sky-500 font-bold">Current turn: {playerOneTurn ? "Player 1" : "Player 2"}</span>
-      <br />
-
       <div className="flex flex-row justify-center">
         <div className="grid h-[700px] w-[700px] text-7xl bg-sky-500/100 text-white p-4 grid-cols-3 grid-rows-3 border-black border-[5px]">
           {tttArr.map((number) => (
@@ -96,7 +112,7 @@ function App () {
           ))}
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
